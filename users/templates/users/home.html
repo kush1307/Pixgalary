@@ -1,7 +1,7 @@
 {% extends 'users/base.html' %}
 
 {% block content %}
-    <h1>Home</h1>
+    <h1>Welcome Home</h1>
     {% if user.is_authenticated %}
         <a class="btn btn-primary" href="{% url 'logout' %}">Logout</a>
     {% endif %}
