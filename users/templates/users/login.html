@@ -1,0 +1,47 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-6">
+            <div class="card" style="margin: 10% auto">
+            <form method="POST">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                        <legend   style="text-align: center; font-weight: bold; padding-top: 2%; padding-bottom: 2%">Welcome to Pixgalary</legend>
+
+                        <div class="form-group">
+                          <center>
+                          <input type="text" style="width: 80%; border-radius:16px; min-height:48px; padding: 8px 16px" name="username" class="form-control" placeholder="Username" required>
+                          </center>
+                        </div>
+
+                        <div class="form-group">
+                          <center>
+                          <input type="password" style="width: 80%; border-radius:16px; min-height:48px; padding: 8px 16px" name="password" class="form-control" placeholder="Password" required>
+                          </center>
+                        </div>
+
+                        <div class="form-group">
+                            <center>
+                            <input class="btn btn-primary" type="submit" value="Login" style="background-color :#e60023; font-size:15px; font-weight: bold; text-align: center; border-radius:20px; height: 40px; width: 80%; border: None">
+                            </center>
+                        </div>
+                        <p style="text-align: center; font-weight: bold">Or</p>
+                            <p style="text-align: center">By continuing, you agree to Pinterest's <b>Terms of</b></p>
+                            <p style="text-align: center; margin-left: 3%"><b>Service</b> and acknowledge that you've read our <b>Privacy Policy</b></p>
+                        <div class="field" style="margin-left: 12%">
+
+                          Already registered ? <a href="#">Login</a>
+
+                        </div>
+                        </fieldset>
+            </form>
+            </div>
+
+        </div>
+        <div class="col-sm-3">
+        </div>
+    </div>
+{% endblock content %}

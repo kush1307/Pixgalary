@@ -1,0 +1,59 @@
+{% extends 'users/base.html' %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-sm-3">
+        </div>
+        <div class="col-sm-6">
+            <div class="card" style="margin: 10% auto">
+            <form method="POST">
+                        {% csrf_token %}
+                        <fieldset class="form-group">
+                        <legend  style="text-align: center; font-weight: bold; padding-top: 2%">Welcome to Pixgalary</legend>
+                        <p style="text-align: center; padding-bottom: 2%">Find new ideas to try</p>
+
+                        <div class="form-group">
+                            <center>
+                            {{ form.username }}
+                            </center>
+                        </div>
+                        <div class="form-group">
+                            <center>
+                            {{ form.email }}
+                            </center>
+                        </div>
+
+                        <div class="form-group">
+                            <center>
+                            {{ form.password1 }}
+                            </center>
+                        </div>
+
+                        <div class="form-group">
+                            <center>
+                            {{ form.password2 }}
+                            </center>
+                        </div>
+
+                        <div class="form-group">
+                            <center>
+                            <input class="btn btn-primary" type="submit" value="Continue" style="background-color :#e60023; font-size:15px; font-weight: bold; text-align: center; border-radius:20px; height: 40px; width: 80%; border: None">
+                            </center>
+                        </div>
+                        <p style="text-align: center; font-weight: bold">Or</p>
+                            <p style="text-align: center">By continuing, you agree to Pinterest's <b>Terms of</b></p>
+                            <p style="text-align: center; margin-left: 3%"><b>Service</b> and acknowledge that you've read our <b>Privacy Policy</b></p>
+                        <div class="field" style="margin-left: 12%">
+
+                          Already registered ? <a href="#">Login</a>
+
+                        </div>
+                        </fieldset>
+            </form>
+            </div>
+
+        </div>
+        <div class="col-sm-3">
+        </div>
+    </div>
+{% endblock content %}
