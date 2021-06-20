@@ -1,4 +1,7 @@
 {% extends 'users/base.html' %}
+{% load static %}
+{% load socialaccount %}
+{% load account %}
 
 {% block content %}
     <div class="row">
@@ -29,11 +32,21 @@
                             </center>
                         </div>
                         <p style="text-align: center; font-weight: bold">Or</p>
-                            <p style="text-align: center">By continuing, you agree to Pinterest's <b>Terms of</b></p>
-                            <p style="text-align: center; margin-left: 3%"><b>Service</b> and acknowledge that you've read our <b>Privacy Policy</b></p>
+                        <center>
+                            <a class="loginBtn loginBtn--facebook" style="color: white" href="#">
+                                Login with Facebook
+                            </a>
+                        </center>
+                        <center>
+                            <a class="loginBtn loginBtn--google" style="color: white" href="{% provider_login_url 'google' %}">
+                              Login with Google
+                            </a>
+                        </center>
+                        <p style="text-align: center">By continuing, you agree to Pinterest's <b>Terms of</b></p>
+                        <p style="text-align: center; margin-left: 3%"><b>Service</b> and acknowledge that you've read our <b>Privacy Policy</b></p>
                         <div class="field" style="margin-left: 12%">
 
-                          Already registered ? <a href="#">Login</a>
+                          Don't have an account ? <a href="#">Sign Up</a>
 
                         </div>
                         </fieldset>
