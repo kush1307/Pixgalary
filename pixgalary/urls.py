@@ -17,11 +17,17 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from users import views as user_views
+from pins import views as pins_views
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
     path('register/', user_views.register, name='register'),
+    path('profile/', user_views.profile, name='profile'),
     path('login/', user_views.login, name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('password-reset/', auth_views.PasswordResetView.as_view(template_name='users/password_reset.html'),
@@ -32,5 +38,9 @@ urlpatterns = [
          name='password_reset_confirm'),
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
          name='password_reset_complete'),
-    path('', user_views.home, name='pin-home'),
+    path('password-change/', user_views.change_password, name='change-password'),
+    path('', pins_views.home, name='pin-home'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
