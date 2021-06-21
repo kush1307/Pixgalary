@@ -30,10 +30,13 @@
                             <center>
                             <input class="btn btn-primary" type="submit" value="Login" style="background-color :#e60023; font-size:15px; font-weight: bold; text-align: center; border-radius:20px; height: 40px; width: 80%; border: None">
                             </center>
+                            <small class="text-muted ml-2">
+                                <a href="{% url 'password_reset' %}" style="margin-left: 50px">Forgot Password?</a>
+                            </small>
                         </div>
                         <p style="text-align: center; font-weight: bold">Or</p>
                         <center>
-                            <a class="loginBtn loginBtn--facebook" style="color: white" href="#">
+                            <a class="loginBtn loginBtn--facebook" style="color: white" href="{% provider_login_url 'facebook' %}">
                                 Login with Facebook
                             </a>
                         </center>
