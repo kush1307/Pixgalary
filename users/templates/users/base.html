@@ -20,17 +20,24 @@
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="{% url 'pin-home' %}">Home</a>
             </div>
+
+          <form id="search-form" class="form-inline mr-auto" style="margin-left: -72px" method="GET" action="{% url 'search' %}">
+              <input class="form-control mr-sm-2"  style="border-radius: 20px; width: 400px; background-color: #eee" type="search" placeholder="Search" name="q">
+              <a type="button" onclick="document.getElementById('search-form').submit();" style="width: 80px; text-decoration: none; font-weight: bold; background-color: #e60023; color: white; border-radius: 20px; padding: 8px 17px">Search</a>
+          </form>
+
             <!-- Navbar Right Side -->
             <div class="navbar-nav">
               {% if user.is_authenticated %}
                   <div class="dropdown">
-                      <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown button
+                      <button style="background-color: #efefef; border: none; color: black; border-radius: 20px" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ request.user }}
                       </button>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                          <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
                          <a class="dropdown-item" href="{% url 'change-password' %}">Change Password</a>
                          <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
+                         <a class="dropdown-item" href="{% url 'pin-create' %}">Create Pin</a>
                       </div>
                     </div>
               {% else %}
@@ -56,5 +63,18 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="{% static 'pins/pins.js' %}"></script>
+    <script>
+      // Add active class to the current button (highlight it)
+      var header = document.getElementById("myDIV");
+      var btns = header.getElementsByClassName("board-btn");
+      for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function() {
+        var current = document.getElementsByClassName("active");
+        current[0].className = current[0].className.replace(" active", "");
+        this.className += " active";
+        });
+      }
+    </script>
 </body>
 </html>

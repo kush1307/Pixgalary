@@ -60,9 +60,6 @@ ul {
   font-size: 2.5rem;
 }
 
-
-
-
 /*#######################################*/
 /*
 Ref:
@@ -109,4 +106,58 @@ stylize any heading tags withing white-panel below
   transition: all 0.3s ease-in-out;
 }
 
+/*Hove button css style*/
+.save-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-color: #555;
+  color: white;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  text-align: center;
+  display: none;
+  text-decoration: none;
+}
 
+.white-panel:hover .save-btn {
+  display: block;
+  border-radius: 20px;
+  width: 80px;
+  background: crimson;
+  opacity: 0.5;
+  color: white;
+  font-weight: bold;
+}
+
+.article-img {
+  height: 65px;
+  width: 65px;
+}
+
+.pinboard-profile-img {
+   height: 150px;
+   width: 150px;
+}
+
+.board-btn {
+  border: none;
+  outline: none;
+  padding: 10px 16px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* Style the active class, and buttons on mouse-over */
+.active, .board-btn:hover {
+  background-color: #e60023;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+}

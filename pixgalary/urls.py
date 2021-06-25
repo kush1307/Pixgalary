@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 from users import views as user_views
-from pins import views as pins_views
+# from pins import views as pins_views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import update_session_auth_hash
@@ -39,7 +39,8 @@ urlpatterns = [
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
          name='password_reset_complete'),
     path('password-change/', user_views.change_password, name='change-password'),
-    path('', pins_views.home, name='pin-home'),
+
+    path('', include('pins.urls'))
 ]
 
 if settings.DEBUG:

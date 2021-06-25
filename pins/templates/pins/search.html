@@ -1,0 +1,27 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="row">
+        {% if topic %}
+
+            <section id="pinBoot">
+              {% for pin in pins %}
+
+                  <article class="white-panel">
+                      <a href="{% url 'pin-detail' pin.id %}">
+                          <img src="{{ pin.image.url }}" class="" alt="">
+                      </a>
+                      <a href="" class="save-btn">Save</a>
+                  </article>
+
+              {% endfor %}
+            </section>
+
+        {% else %}
+            <h1>You forgot to search for some topic</h1>
+        {% endif %}
+    </div>
+
+{% endblock content %}

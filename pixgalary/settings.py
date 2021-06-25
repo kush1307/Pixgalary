@@ -35,6 +35,7 @@ ALLOWED_HOSTS = ['pixgalary.herokuapp.com', '127.0.0.1']
 INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'pins.apps.PinsConfig',
+    'crispy_forms',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -168,6 +169,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
@@ -189,3 +192,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+
+# print(EMAIL_HOST_USER)
+# print(EMAIL_HOST_PASSWORD)

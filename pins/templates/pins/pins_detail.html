@@ -1,0 +1,36 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="card" style="border-radius: 20px;">
+        <div class="row" style="">
+            <div class="col-md-6" >
+                <img src="{{ object.image.url }}" alt="" style="border: 8px solid white; height: 100%;">
+            </div>
+            <div class="col-md-6">
+                <div class="card-body">
+                    {% if object.user == user %}
+                      <div>
+                        <a href="{% url 'pin-update' object.id %}" class="btn btn-secondary btn-sm mt-1 mb-1">Update</a>
+                        <a href="{% url 'pin-delete' object.id %}" class="btn btn-danger btn-sm mt-1 mb-1">Delete</a>
+                      </div>
+                    {% endif %}
+
+                    {% if object.user != user and user.is_authenticated %}
+                      <div>
+                        <a href="#" class="btn btn-secondary btn-sm mt-1 mb-1">Save</a>
+                      </div>
+                    {% endif %}
+
+                    <h2 class="card-title">{{ object.title }}</h2>
+                    <p>{{ object.description }}</p>
+                    <img class="rounded-circle article-img" src="{{ object.user.profile.image.url }}" alt="">
+                    <a href="{% url 'user-board' object.user.username %}" style="color: black; font-weight: bold;">{{ object.user }}</a>
+                    <a href="#" class="btn btn-primary" style="margin-left:200px;">Follow</a>
+                    <br>
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

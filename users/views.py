@@ -44,7 +44,7 @@ def change_password(request):
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
             user = form.save()
-            logout(request)  # Important!
+            logout(request)
             messages.success(request, 'Your password was successfully updated!')
             return redirect('login')
         else:
