@@ -12,23 +12,21 @@
 
     <div class="text-center mb-5">
        <div id="myDIV">
-            <a href="{% url 'user-save-board' user_name %}" class="board-btn">Saved</a>
-            <a href="#" class="board-btn active">Created</a>
+            <a href="#" class="board-btn active">Saved</a>
+            <a href="#" class="board-btn">Created</a>
        </div>
     </div>
 
     <div class="row">
         <section id="pinBoot">
-
-          {% for pin in pins %}
+          {% for pin in saved_pins %}
               <article class="white-panel">
-                  <a href="{% url 'pin-detail' pin.id %}">
-                      <img src="{{ pin.image.url }}" class="" alt="">
+                  <a href="{% url 'pin-detail' pin.pin.id %}">
+                      <img src="{{ pin.pin.image.url }}" class="" alt="">
                   </a>
                   <a href="#" class="save-btn">Save</a>
               </article>
           {% endfor %}
-
         </section>
     </div>
 

@@ -1,4 +1,5 @@
-from django.shortcuts import render, get_object_or_404
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from .models import Pins, Category, SavePin
 from users.models import Profile
 from django.urls import reverse_lazy, reverse
@@ -81,47 +82,36 @@ class UserBoardView(ListView):
 
 # TODO -get username who has clicked on the save button.
 # TODO -get the pin id from the url and save that pin object and username to SavePin model.
-# class SavePinView(CreateView):
-#     Model = SavePin
-#     template_name = 'pins/pins_detail.html'
-#
-#     def get_context_data(self, **kwargs):
-#         pin_id = get_object_or_404(Pins, pk=self.kwargs.get('pk'))
-#         pin_data = Pins.objects.get(title=pin_id)
-#         user_data = Pins.objects.get(title=pin_id).user
-#         save_data = SavePin(pin=pin_data, user=user_data)
-#         save_data.save()
-#         print(f"-------------> {pin_data}")
-#         print(f"-------------> {user_data}")
-#         data = super().get_context_data(**kwargs)
-#         data['pin_data'] = pin_data
-#         data['user_data'] = user_data
-#
-#         return data
-
-    # def post(self, request, *args, **kwargs):
-    #     if request.method == 'POST':
-    #
-    #
-    #     return reverse_lazy()
-
-
 def save_pin_view(request, **kwargs):
-    pin_id = get_object_or_404(Pins, pk=kwargs.get('pk'))
-    pin_data = Pins.objects.get(title=pin_id).id
-    print(f"---------> {pin_data}")
-    user_data = request.user.username
-    print(f"---------> {user_data}")
-    data_needed = SavePin(pin=pin_data, user=user_data)
-    data_needed.save()
-    context = {
-        'saved_pins': SavePin.objects.filter(pin__title__contains=pin_data).filter(user__username__contains=user_data)
-    }
+    if request.method == "GET":
+        pin_id = get_object_or_404(Pins, pk=kwargs.get('pk'))
+        pin_saved_by_user = request.user.username
+        print(f"---------> {pin_id} --- {type(pin_id)}")
+        pin_data = Pins.objects.get(pk=pin_id.id)
+        print(f"######### >> {pin_data}")
+        if SavePin.objects.filter(pin=pin_data, user=User.objects.get(username=pin_saved_by_user)).exists():
+            messages.error(request, f'You have already saved this pin.')
+            return render(request, 'pins/home.html')
+        data_needed = SavePin(pin=pin_data, user=User.objects.get(username=pin_saved_by_user))
+        data_needed.save()
 
-    return render(request, 'pins/pinboard.html', context)
+    return HttpResponse('Saved!')
 
 
 # TODO -Filter all pins by users and display their saved pins.
 # **pinboard_save.html is cerated for only testing I think it is not needed for now.**
-def user_saved_pin(request):
-    pass
+class UserSavedPinsView(ListView):
+    model = SavePin
+    template_name = 'pins/pinboard_save.html'
+    context_object_name = 'saved_pins'
+
+    def get_context_data(self, **kwargs):
+        user = get_object_or_404(User, username=self.kwargs.get('username'))
+        new_var = User.objects.get(username=user).profile.image.url
+        # data_required = SavePin.objects.filter(user__username=user.username)
+        data = super().get_context_data(**kwargs)
+        data['saved_pins'] = SavePin.objects.filter(user__username=user.username)
+        data['user_name'] = user.username
+        data['url'] = new_var
+        return data
+
