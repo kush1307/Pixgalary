@@ -35,6 +35,7 @@
                       </button>
                       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                          <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                         <a class="dropdown-item" href="{% url 'user-board' request.user.username %}">Your Pinboard</a>
                          <a class="dropdown-item" href="{% url 'change-password' %}">Change Password</a>
                          <a class="dropdown-item" href="{% url 'profile' %}">Profile</a>
                          <a class="dropdown-item" href="{% url 'pin-create' %}">Create Pin</a>

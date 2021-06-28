@@ -19,3 +19,11 @@ class Profile(models.Model):
             output_size = (300, 300)
             img.thumbnail(output_size)
             img.save(self.image.path)
+
+
+class Followers(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    another_user = models.ManyToManyField(User, related_name='another_user')
+
+    def __str__(self):
+        return self.user.username

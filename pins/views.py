@@ -25,8 +25,35 @@ class PinCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PinDetailView(DetailView):
-    model = Pins
+# class PinDetailView(DetailView):
+#     model = Pins
+#
+#     def get_context_data(self, **kwargs):
+#         # pin_id = get_object_or_404(Pins, pk=kwargs.get('pk'))
+#         # pin_saved_by_user = self.request.user.username
+#         # pin_data = Pins.objects.get(pk=pin_id.id)
+#         # saved = False
+#         # if SavePin.objects.filter(pin=pin_data, user=User.objects.get(username=pin_saved_by_user)).exists():
+#         #     saved = True
+#         data = super().get_context_data(**kwargs)
+#         data['saved'] = 'saved'
+#         return data
+
+def pin_detail(request, **kwargs):
+    pin_id = get_object_or_404(Pins, pk=kwargs.get('pk'))
+    print(pin_id)
+    pin_saved_by_user = request.user.username
+    print(pin_saved_by_user)
+    pin_data = Pins.objects.get(pk=pin_id.id)
+    print(pin_data)
+    saved = False
+    if SavePin.objects.filter(pin=pin_data, user=User.objects.get(username=pin_saved_by_user)).exists():
+        saved = True
+
+    print(saved)
+    context = {"object": Pins.objects.get(pk=kwargs.get('pk')),
+               'saved': saved}
+    return render(request, 'pins/pins_detail.html', context)
 
 
 class PinUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
@@ -89,13 +116,18 @@ def save_pin_view(request, **kwargs):
         print(f"---------> {pin_id} --- {type(pin_id)}")
         pin_data = Pins.objects.get(pk=pin_id.id)
         print(f"######### >> {pin_data}")
+        saved = False
         if SavePin.objects.filter(pin=pin_data, user=User.objects.get(username=pin_saved_by_user)).exists():
-            messages.error(request, f'You have already saved this pin.')
+            instance = SavePin.objects.get(pin=pin_data, user=User.objects.get(username=pin_saved_by_user))
+            instance.delete()
+            messages.error(request, f'You have unsaved a pin!!')
+            saved = False
             return render(request, 'pins/home.html')
         data_needed = SavePin(pin=pin_data, user=User.objects.get(username=pin_saved_by_user))
         data_needed.save()
-
-    return HttpResponse('Saved!')
+        saved = True
+        messages.error(request, f'Pin Saved!!')
+    return render(request, 'pins/home.html')
 
 
 # TODO -Filter all pins by users and display their saved pins.

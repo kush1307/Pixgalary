@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from .models import Profile
+from .models import Profile, Followers
 
 
 def register(request):
@@ -78,4 +78,27 @@ def profile(request):
         'p_form': p_form
     }
     return render(request, 'users/profile.html', context)
+
+
+def follow_user(request, user_name):
+    other_user = User.objects.get(username=user_name)
+    session_user = request.user.username
+    get_user = User.objects.get(username=session_user)
+    check_follower = Followers.objects.get(user=get_user.id)
+    is_followed = False
+    if other_user.name != session_user:
+        if check_follower.another_user.filter(username=other_user).exists():
+            add_usr = Followers.objects.get(user=get_user)
+            add_usr.another_user.remove(other_user)
+            is_followed = False
+            return redirect(f'/')
+        else:
+            add_usr = Followers.objects.get(user=get_user)
+            add_usr.another_user.add(other_user)
+            is_followed = True
+            return redirect(f'/')
+
+        return redirect(f'')
+    else:
+        return redirect(f'/profile/{session_user}')
 

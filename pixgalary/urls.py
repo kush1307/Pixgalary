@@ -39,8 +39,8 @@ urlpatterns = [
     path('password-reset-complete/', auth_views.PasswordResetCompleteView.as_view(template_name='users/password_reset_complete.html'),
          name='password_reset_complete'),
     path('password-change/', user_views.change_password, name='change-password'),
-
-    path('', include('pins.urls'))
+    path('', include('pins.urls')),
+    path('user/follow/pin/<str:username>/', user_views.follow_user, name='follow-user'),
 ]
 
 if settings.DEBUG:

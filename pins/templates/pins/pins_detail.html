@@ -17,16 +17,28 @@
                     {% endif %}
 
                     {% if object.user != user and user.is_authenticated %}
-                      <div>
-                        <a href="{% url 'save-pin' object.id %}" class="btn btn-secondary btn-sm mt-1 mb-1">Save</a>
-                      </div>
+                      {% if saved %}
+
+                        <div>
+                          <a href="{% url 'save-pin' object.id %}" class="btn btn-danger btn-sm mt-1 mb-1">Unsave</a>
+                        </div>
+
+                      {% else %}
+
+                        <div>
+                          <a href="{% url 'save-pin' object.id %}" class="btn btn-secondary btn-sm mt-1 mb-1">Save</a>
+                        </div>
+
+                      {% endif %}
                     {% endif %}
 
                     <h2 class="card-title">{{ object.title }}</h2>
                     <p>{{ object.description }}</p>
                     <img class="rounded-circle article-img" src="{{ object.user.profile.image.url }}" alt="">
                     <a href="{% url 'user-board' object.user.username %}" style="color: black; font-weight: bold;">{{ object.user }}</a>
-                    <a href="#" class="btn btn-primary" style="margin-left:200px;">Follow</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'follow-user' object.user.username %}" class="btn btn-primary" style="margin-left:200px;">Follow</a>
+                    {% endif %}
                     <br>
 
                 </div>
