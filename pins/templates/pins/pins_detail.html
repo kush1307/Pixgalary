@@ -20,13 +20,13 @@
                       {% if saved %}
 
                         <div>
-                          <a href="{% url 'save-pin' object.id %}" class="btn btn-danger btn-sm mt-1 mb-1">Unsave</a>
+                          <a href="{% url 'save-pin' object.id %}" class="btn btn-secondary btn-sm mt-1 mb-1">Unsave</a>
                         </div>
 
                       {% else %}
 
                         <div>
-                          <a href="{% url 'save-pin' object.id %}" class="btn btn-secondary btn-sm mt-1 mb-1">Save</a>
+                          <a href="{% url 'save-pin' object.id %}" class="btn btn-primary btn-sm mt-1 mb-1">Save</a>
                         </div>
 
                       {% endif %}
@@ -36,8 +36,12 @@
                     <p>{{ object.description }}</p>
                     <img class="rounded-circle article-img" src="{{ object.user.profile.image.url }}" alt="">
                     <a href="{% url 'user-board' object.user.username %}" style="color: black; font-weight: bold;">{{ object.user }}</a>
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'follow-user' object.user.username %}" class="btn btn-primary" style="margin-left:200px;">Follow</a>
+                    {% if object.user != user and user.is_authenticated %}
+                        {% if is_followed %}
+                            <a href="{% url 'follow-user' object.user.username %}" class="btn btn-secondary" style="margin-left:200px;">Unfollow</a>
+                        {% else %}
+                            <a href="{% url 'follow-user' object.user.username %}" class="btn btn-primary" style="margin-left:200px;">Follow</a>
+                        {% endif %}
                     {% endif %}
                     <br>
 

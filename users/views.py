@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.http import HttpResponseRedirect
 from django.contrib import messages, auth
 from .forms import UserRegisterForm, ProfileUpdateForm, UserUpdateForm
 from django.contrib.auth.models import User
@@ -80,25 +81,49 @@ def profile(request):
     return render(request, 'users/profile.html', context)
 
 
-def follow_user(request, user_name):
-    other_user = User.objects.get(username=user_name)
+def follow_user(request, **kwargs):
+    other_user = User.objects.get(username=kwargs.get('username'))
+    print(other_user)
     session_user = request.user.username
+    print(session_user)
     get_user = User.objects.get(username=session_user)
-    check_follower = Followers.objects.get(user=get_user.id)
+    check_follower = Followers.objects.filter(user=get_user.id).exists()
+    print(check_follower)
     is_followed = False
-    if other_user.name != session_user:
+
+    if check_follower:
+        # if other_user.name != session_user:   # user cannot follow himself.
+        check_follower = Followers.objects.get(user=get_user.id)
         if check_follower.another_user.filter(username=other_user).exists():
             add_usr = Followers.objects.get(user=get_user)
             add_usr.another_user.remove(other_user)
             is_followed = False
-            return redirect(f'/')
+            messages.success(request, f'User Unfollowed!')
+            return render(request, 'pins/home.html')
         else:
             add_usr = Followers.objects.get(user=get_user)
             add_usr.another_user.add(other_user)
             is_followed = True
-            return redirect(f'/')
+            messages.success(request, f'User Followed!')
+            return render(request, 'pins/home.html')
 
-        return redirect(f'')
     else:
-        return redirect(f'/profile/{session_user}')
+        save_user = Followers(user=get_user)
+        print(save_user)
+        save_user.save()
+        check_follower = Followers.objects.get(user=get_user.id)
+        print(f"Check_Followers in else clause --> {check_follower}")
+        is_followed = False
+        if check_follower.another_user.filter(username=other_user).exists():
+            add_usr = Followers.objects.get(user=get_user)
+            add_usr.another_user.remove(other_user)
+            is_followed = False
+            messages.success(request, f'User Unfollowed!')
+            return render(request, 'pins/home.html')
+        else:
+            add_usr = Followers.objects.get(user=get_user)
+            add_usr.another_user.add(other_user)
+            is_followed = True
+            messages.success(request, f'User Followed!')
+            return render(request, 'pins/home.html')
 
