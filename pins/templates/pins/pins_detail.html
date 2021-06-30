@@ -9,12 +9,25 @@
             </div>
             <div class="col-md-6">
                 <div class="card-body">
+                  <div>
                     {% if object.user == user %}
-                      <div>
+
                         <a href="{% url 'pin-update' object.id %}" class="btn btn-secondary btn-sm mt-1 mb-1">Update</a>
                         <a href="{% url 'pin-delete' object.id %}" class="btn btn-danger btn-sm mt-1 mb-1">Delete</a>
-                      </div>
+
                     {% endif %}
+
+                      <div class="fb-share-button" data-href="http://pixgalary.herokuapp.com/pin/{{ object.id }}/" data-layout="button" data-size="large">
+                          <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fpixgalary.herokuapp.com%2Fpin%2F6%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">
+                              Share
+                          </a>
+                      </div>
+
+                      <a target="_blank" class="twitter-share-button mt-1" data-href="http://127.0.0.1:8000/pin/{{ object.id }}/"
+                          href="https://twitter.com/intent/tweet?text=Plz%20Check"
+                          data-size="small">Tweet
+                      </a>
+                  </div>
 
                     {% if object.user != user and user.is_authenticated %}
                       {% if saved %}
