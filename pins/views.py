@@ -101,6 +101,7 @@ class PinDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
 def SearchResultView(request):
     topic = request.GET.get('q')
+    topic = topic.strip()
     pi = Pins.objects.filter(category__topic__icontains=topic)
 
     return render(request, 'pins/search.html', {'topic': topic,
