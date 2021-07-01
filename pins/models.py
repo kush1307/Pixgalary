@@ -28,3 +28,18 @@ class SavePin(models.Model):
     def __str__(self):
         return f"{self.pin.id} - {self.user}"
 
+
+class Board(models.Model):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    title = models.CharField(max_length=100)
+    pins = models.ManyToManyField(Pins, related_name='pins', blank=True)
+    category = models.ManyToManyField(Category)
+    image1 = models.ImageField(upload_to='all_photos', blank=True)
+    image2 = models.ImageField(upload_to='all_photos', blank=True)
+    image3 = models.ImageField(upload_to='all_photos', blank=True)
+    image4 = models.ImageField(upload_to='all_photos', blank=True)
+
+    def __str__(self):
+        return self.title
+
+

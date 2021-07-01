@@ -17,16 +17,18 @@
 
                     {% endif %}
 
-                      <div class="fb-share-button" data-href="https://pixgalary.herokuapp.com/pin/{{ object.id }}/" data-layout="button" data-size="large">
-                          <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fpixgalary.herokuapp.com%2Fpin%2F6%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">
-                              Share
-                          </a>
-                      </div>
+{#                  <div class="float-right fb-share-button" data-href="https://pixgalary.herokuapp.com/pin/{{ object.id }}/" data-layout="button" data-size="small">#}
+{#                      <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fpixgalary.herokuapp.com%2Fpin%2F6%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">#}
+{#                          Share</a>#}
+{#                  </div>#}
+{##}
+{#                  <div class="float-right mt-1 mr-2">#}
+{#                      <a target="_blank" class="twitter-share-button mt-1" data-href="https://pixgalary.herokuapp.com/pin/{{ object.id }}/"#}
+{#                          href="https://twitter.com/intent/tweet?text=Plz%20Check"#}
+{#                          data-size="small">Tweet</a>#}
+{#                  </div>#}
 
-                      <a target="_blank" class="twitter-share-button mt-1" data-href="https://pixgalary.herokuapp.com/pin/{{ object.id }}/"
-                          href="https://twitter.com/intent/tweet?text=Plz%20Check"
-                          data-size="small">Tweet
-                      </a>
+
                   </div>
 
                     {% if object.user != user and user.is_authenticated %}
@@ -34,12 +36,44 @@
 
                         <div>
                           <a href="{% url 'save-pin' object.id %}" class="btn btn-secondary btn-sm mt-1 mb-1">Unsave</a>
+
+                          <div class="float-right fb-share-button" data-href="https://pixgalary.herokuapp.com/pin/{{ object.id }}/" data-layout="button" data-size="small">
+                              <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fpixgalary.herokuapp.com%2Fpin%2F6%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">
+                                  Share</a>
+                          </div>
+
+                          <div class="float-right mt-1 mr-2">
+                              <a target="_blank" class="twitter-share-button mt-1" data-href="https://pixgalary.herokuapp.com/pin/{{ object.id }}/"
+                                  href="https://twitter.com/intent/tweet?text=Plz%20Check"
+                                  data-size="small">Tweet</a>
+                          </div>
                         </div>
 
                       {% else %}
 
                         <div>
                           <a href="{% url 'save-pin' object.id %}" class="btn btn-primary btn-sm mt-1 mb-1">Save</a>
+                          <button style="background-color: #efefef; border: none; color: black; border-radius: 20px" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButtonn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            SAVE
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonn">
+                             <a class="dropdown-item" href="{% url 'save-pin' object.id %}">Save to your pinboard</a>
+                              {% for choice in board_choices %}
+                                  <a class="dropdown-item" href="{% url 'save-to-board' object.id choice.id %}">{{ choice.title }}</a>
+                              {% endfor %}
+                             <a class="dropdown-item" href="{% url 'board-create' %}">+Create Board</a>
+                          </div>
+
+                          <div class="float-right fb-share-button" data-href="https://pixgalary.herokuapp.com/pin/{{ object.id }}/" data-layout="button" data-size="small">
+                              <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fpixgalary.herokuapp.com%2Fpin%2F6%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">
+                                  Share</a>
+                          </div>
+
+                          <div class="float-right mt-1 mr-2">
+                              <a target="_blank" class="twitter-share-button mt-1" data-href="https://pixgalary.herokuapp.com/pin/{{ object.id }}/"
+                                  href="https://twitter.com/intent/tweet?text=Plz%20Check"
+                                  data-size="small">Tweet</a>
+                          </div>
                         </div>
 
                       {% endif %}

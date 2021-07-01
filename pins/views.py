@@ -1,11 +1,12 @@
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
-from .models import Pins, Category, SavePin
+from .models import Pins, Category, SavePin, Board
 from users.models import Profile, Followers
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required
 
 
 def home(request):
@@ -39,6 +40,8 @@ class PinCreateView(LoginRequiredMixin, CreateView):
 #         data['saved'] = 'saved'
 #         return data
 
+
+@login_required
 def pin_detail(request, **kwargs):
     # For save button functionality if already saved then unsave button will be render else save button.
     pin_id = get_object_or_404(Pins, pk=kwargs.get('pk'))
@@ -65,10 +68,12 @@ def pin_detail(request, **kwargs):
         if check_follower.another_user.filter(username=other_user).exists():
             is_followed = True
 
+    board_choices = Board.objects.filter(user__username=pin_saved_by_user)
+
     print(saved)
     print(is_followed)
     context = {"object": Pins.objects.get(pk=kwargs.get('pk')),
-               'saved': saved, 'is_followed': is_followed}
+               'saved': saved, 'is_followed': is_followed, 'board_choices': board_choices}
 
     return render(request, 'pins/pins_detail.html', context)
 
@@ -99,7 +104,18 @@ class PinDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return False
 
 
+@login_required
 def SearchResultView(request):
+    """
+     ** Optimized search filter **
+     import operator
+     queries = 'superman avengers'
+     queries = queries.split(' ')
+     from functools import reduce
+     from django.db.models import Q
+     qset1 =  reduce(operator.__or__, [Q(category__topic__icontains=query) | Q(category__topic__icontains=query) for query in queries])
+     results = Pins.objects.filter(qset1).distinct()
+    """
     topic = request.GET.get('q')
     topic = topic.strip()
     pi = Pins.objects.filter(category__topic__icontains=topic)
@@ -108,7 +124,7 @@ def SearchResultView(request):
                                                 'pins': pi})
 
 
-class UserBoardView(ListView):
+class UserBoardView(ListView, LoginRequiredMixin):
     model = Pins
     template_name = 'pins/pinboard.html'
     context_object_name = 'pins'
@@ -140,7 +156,9 @@ class UserBoardView(ListView):
 
 # TODO -get username who has clicked on the save button.
 # TODO -get the pin id from the url and save that pin object and username to SavePin model.
+@login_required
 def save_pin_view(request, **kwargs):
+    my_id = kwargs.get('pk')
     if request.method == "GET":
         pin_id = get_object_or_404(Pins, pk=kwargs.get('pk'))
         pin_saved_by_user = request.user.username
@@ -153,17 +171,22 @@ def save_pin_view(request, **kwargs):
             instance.delete()
             messages.success(request, f'You have unsaved a pin!!')
             saved = False
-            return render(request, 'pins/home.html')
+            # return render(request, 'pins/home.html')
+            # return reverse('pin-detail', my_id)
+            return redirect('pin-detail', my_id)
+
         data_needed = SavePin(pin=pin_data, user=User.objects.get(username=pin_saved_by_user))
         data_needed.save()
         saved = True
         messages.success(request, f'Pin Saved!!')
-    return render(request, 'pins/home.html')
+    # return render(request, 'pins/home.html')
+    # return reverse('pin-detail', my_id)
+    return redirect('pin-detail', my_id)
 
 
 # TODO -Filter all pins by users and display their saved pins.
 # **pinboard_save.html is cerated for only testing I think it is not needed for now.**
-class UserSavedPinsView(ListView):
+class UserSavedPinsView(ListView, LoginRequiredMixin):
     model = SavePin
     template_name = 'pins/pinboard_save.html'
     context_object_name = 'saved_pins'
@@ -189,5 +212,31 @@ class UserSavedPinsView(ListView):
         data['following'] = following
         data['session_following'] = session_following
 
+        data['user_boards'] = Board.objects.filter(user__username=user.username)
+
         return data
+
+
+# Board create form
+class BoardCreateView(LoginRequiredMixin, CreateView):
+    model = Board
+    fields = ['title', 'category', 'image1', 'image2', 'image3', 'image4']
+    template_name = 'pins/board_form.html'
+    success_url = reverse_lazy('pin-home')
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+def save_pin_board_view(request, p_id, b_id):
+    pin_id = get_object_or_404(Pins, id=p_id)
+    board_id = get_object_or_404(Board, id=b_id)
+    # board_id.pins.add(pin_id)
+    print(pin_id)
+    print(board_id)
+    return HttpResponse('HEHEHEHE')
+
+
+
 

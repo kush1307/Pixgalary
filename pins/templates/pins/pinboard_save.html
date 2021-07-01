@@ -30,4 +30,60 @@
         </section>
     </div>
 
+    <hr>
+
+    <h1>Your Boards</h1>
+
+    <br><br>
+
+    <div class="row">
+        {% for board in user_boards %}
+            <div class="col-sm-3" style="padding: 0 30px;">
+                <a href="#">
+                <div class="row">
+                  <div class="col-sm" style="padding-left: 0; padding-right: 0;">
+                      {% if board.image1 %}
+                        <img class="card-img-top" src="{{ board.image1.url }}" alt="" style="max-width: 100%; height: 100%; border: 1px solid white;">
+                      {% else %}
+                          <img class="card-img-top" src="" alt="" style="max-width: 100%; height: 100%; border: 1px solid white;">
+                      {% endif %}
+
+                  </div>
+
+                  <div class="col-sm" style="padding-left: 0; padding-right: 0;">
+                      {% if board.image2 %}
+                        <img class="card-img-top" src="{{ board.image2.url }}" alt="" style="max-width: 100%; height: 100%; border: 1px solid white;">
+                      {% else %}
+                          <img class="card-img-top" src="" alt="" style="max-width: 100%; height: 100%; border: 1px solid white;">
+                      {% endif %}
+
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-sm" style="padding-left: 0; padding-right: 0;">
+                      {% if board.image3 %}
+                        <img class="card-img-top" src="{{ board.image3.url }}" alt="" style="max-width: 100%; height: 100%; border: 1px solid white;">
+                      {% else %}
+                          <img class="card-img-top" src="" alt="" style="max-width: 100%; height: 100%; border: 1px solid white;">
+                      {% endif %}
+
+                  </div>
+
+                  <div class="col-sm" style="padding-left: 0; padding-right: 0;">
+                      {% if board.image4 %}
+                        <img class="card-img-top" src="{{ board.image4.url }}" alt="" style="max-width: 100%; height: 100%; border: 1px solid white;">
+                      {% else %}
+                          <img class="card-img-top" src="" alt="" style="max-width: 100%; height: 100%; border: 1px solid white;">
+                      {% endif %}
+
+                  </div>
+                </div>
+                <p class="text-center" style="text-decoration: none; font-weight: bold; color: #333333">{{ board.title }}</p>
+                </a>
+            </div>
+        {% endfor %}
+
+    </div>
+
 {% endblock content %}
