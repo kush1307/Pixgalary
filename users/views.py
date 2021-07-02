@@ -91,6 +91,10 @@ def follow_user(request, **kwargs):
     print(check_follower)
     is_followed = False
 
+    # re = Followers.objects.get(user__username='realkush')
+    # for i in Followers.objects.filter():
+    #     print(i.another_user.filter(username=re.user.username))
+
     if check_follower:
         # if other_user.name != session_user:   # user cannot follow himself.
         check_follower = Followers.objects.get(user=get_user.id)
@@ -126,4 +130,6 @@ def follow_user(request, **kwargs):
             is_followed = True
             messages.success(request, f'User Followed!')
             return render(request, 'pins/home.html')
+
+
 

@@ -45,15 +45,25 @@ class PinCreateView(LoginRequiredMixin, CreateView):
 def pin_detail(request, **kwargs):
     # For save button functionality if already saved then unsave button will be render else save button.
     pin_id = get_object_or_404(Pins, pk=kwargs.get('pk'))
-    print(pin_id)
     pin_owner = pin_id.user.username
     pin_saved_by_user = request.user.username
-    print(pin_saved_by_user)
     pin_data = Pins.objects.get(pk=pin_id.id)
-    print(pin_data)
+
     saved = False
-    if SavePin.objects.filter(pin=pin_data, user=User.objects.get(username=pin_saved_by_user)).exists():
-        saved = True
+    if Board.objects.filter(user__username=pin_saved_by_user, pins=pin_id).exists():
+        board_id = Board.objects.get(user__username=pin_saved_by_user, pins=pin_id)
+        b_id = board_id.id
+
+        condition1 = SavePin.objects.filter(pin=pin_data, user=User.objects.get(username=pin_saved_by_user)).exists()
+        items = board_id.pins.all()
+        condition2 = pin_data in items
+
+        if condition1 or condition2:
+            saved = True
+
+    else:
+        if SavePin.objects.filter(pin=pin_data, user=User.objects.get(username=pin_saved_by_user)).exists():
+            saved = True
 
     # For follow functionality if already followed then unfollow button will be render.
     other_user = User.objects.get(username=pin_owner)
@@ -135,11 +145,20 @@ class UserBoardView(ListView, LoginRequiredMixin):
         user_name = User.objects.get(username=user).username
 
         # For calculating number of followers and followings of a user.
-        user_obj = User.objects.get( username=self.kwargs.get('username'))
-        session_user = User.objects.get(username=self.request.user.username)
-        session_following, create = Followers.objects.get_or_create(user=session_user)
-        following, create = Followers.objects.get_or_create(user=session_user.id)
-        check_user_followers = Followers.objects.filter(another_user=user_obj)
+        # user_obj = User.objects.get( username=self.kwargs.get('username'))
+        # session_user = User.objects.get(username=self.request.user.username)
+        # session_following, create = Followers.objects.get_or_create(user=session_user)
+        # following, create = Followers.objects.get_or_create(user=session_user.id)
+        # check_user_followers = Followers.objects.filter(another_user=user_obj)
+
+        re = Followers.objects.get(user__username=self.kwargs.get('username'))
+        check_user_followers = re.another_user.count()
+        print(f"->>>>>>>>>>>>>>>>>>> {check_user_followers}")
+        count_following = 0
+        for i in Followers.objects.filter():
+            if i.another_user.filter(username=re.user.username).exists():
+                count_following += 1
+        print(f"--->>>>>>>>>>>>>>>>>>>>>>>>{count_following}")
 
         print(new_var)
         data = super().get_context_data(**kwargs)
@@ -148,8 +167,8 @@ class UserBoardView(ListView, LoginRequiredMixin):
         data['pins'] = Pins.objects.filter(user=user)
 
         data['followers'] = check_user_followers
-        data['following'] = following
-        data['session_following'] = session_following
+        # data['following'] = following
+        data['count_following'] = count_following
 
         return data
 
@@ -166,14 +185,28 @@ def save_pin_view(request, **kwargs):
         pin_data = Pins.objects.get(pk=pin_id.id)
         print(f"######### >> {pin_data}")
         saved = False
+
         if SavePin.objects.filter(pin=pin_data, user=User.objects.get(username=pin_saved_by_user)).exists():
             instance = SavePin.objects.get(pin=pin_data, user=User.objects.get(username=pin_saved_by_user))
             instance.delete()
+            print("***********************")
             messages.success(request, f'You have unsaved a pin!!')
             saved = False
             # return render(request, 'pins/home.html')
             # return reverse('pin-detail', my_id)
             return redirect('pin-detail', my_id)
+
+        if Board.objects.filter(user__username=pin_saved_by_user, pins=pin_id).exists():
+            board_id = Board.objects.get(user__username=pin_saved_by_user, pins=pin_id)
+            b_id = board_id.id
+            items = board_id.pins.all()
+            condition = pin_data in items
+
+            if condition:
+                board_id.pins.remove(pin_id)
+                saved = False
+                messages.success(request, f'You have unsaved a pin from your board!!')
+                return redirect('pin-detail', my_id)
 
         data_needed = SavePin(pin=pin_data, user=User.objects.get(username=pin_saved_by_user))
         data_needed.save()
@@ -197,11 +230,20 @@ class UserSavedPinsView(ListView, LoginRequiredMixin):
         # data_required = SavePin.objects.filter(user__username=user.username)
 
         # For calculating number of followers and followings of a user.
-        user_obj = User.objects.get(username=self.kwargs.get('username'))
-        session_user = User.objects.get(username=self.request.user.username)
-        session_following, create = Followers.objects.get_or_create(user=session_user)
-        following, create = Followers.objects.get_or_create(user=session_user.id)
-        check_user_followers = Followers.objects.filter(another_user=user_obj)
+        # user_obj = User.objects.get(username=self.kwargs.get('username'))
+        # session_user = User.objects.get(username=self.request.user.username)
+        # session_following, create = Followers.objects.get_or_create(user=session_user)
+        # following, create = Followers.objects.get_or_create(user=session_user.id)
+        # check_user_followers = Followers.objects.filter(another_user=user_obj)
+
+        re = Followers.objects.get(user__username=self.kwargs.get('username'))
+        check_user_followers = re.another_user.count()
+        print(f"->>>>>>>>>>>>>>>>>>> {check_user_followers}")
+        count_following = 0
+        for i in Followers.objects.filter():
+            if i.another_user.filter(username=re.user.username).exists():
+                count_following += 1
+        print(f"--->>>>>>>>>>>>>>>>>>>>>>>>{count_following}")
 
         data = super().get_context_data(**kwargs)
         data['saved_pins'] = SavePin.objects.filter(user__username=user.username)
@@ -209,8 +251,8 @@ class UserSavedPinsView(ListView, LoginRequiredMixin):
         data['url'] = new_var
 
         data['followers'] = check_user_followers
-        data['following'] = following
-        data['session_following'] = session_following
+        # data['following'] = following
+        data['count_following'] = count_following
 
         data['user_boards'] = Board.objects.filter(user__username=user.username)
 
@@ -231,12 +273,67 @@ class BoardCreateView(LoginRequiredMixin, CreateView):
 
 def save_pin_board_view(request, p_id, b_id):
     pin_id = get_object_or_404(Pins, id=p_id)
+    pin_saved_by_user = request.user.username
     board_id = get_object_or_404(Board, id=b_id)
-    # board_id.pins.add(pin_id)
+
     print(pin_id)
     print(board_id)
-    return HttpResponse('HEHEHEHE')
+
+    condition1 = SavePin.objects.filter(pin=pin_id, user=User.objects.get(username=pin_saved_by_user)).exists()
+    items = board_id.pins.all()
+    condition2 = pin_id in items
+    saved = False
+
+    Board.objects.filter(user__username='elon', pins=pin_id)
+
+    if condition1 or condition2:
+        if condition1:
+            instance = SavePin.objects.get(pin=pin_id, user=User.objects.get(username=pin_saved_by_user))
+            instance.delete()
+            saved = False
+            messages.success(request, f'You have unsaved a pin!!')
+            return redirect('pin-detail', p_id)
+
+        elif condition2:
+            board_id.pins.remove(pin_id)
+            saved = False
+            messages.success(request, f'You have unsaved a pin from your board!!')
+            return redirect('pin-detail', p_id)
+
+    board_id.pins.add(pin_id)
+    saved = True
+    messages.success(request, f'Pin saved to board!!')
+
+    return redirect('pin-detail', p_id)
 
 
+class BoardDetailView(DetailView):
+    model = Board
+    template_name = 'pins/boards_detail.html'
 
+
+class BoardUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Board
+    fields = ['title', 'image1', 'image2', 'image3', 'image4']
+
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def test_func(self):
+        pin = self.get_object()
+        if self.request.user == pin.user:
+            return True
+        return False
+
+
+class BoardDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Board
+    success_url = '/'
+
+    def test_func(self):
+        pin = self.get_object()
+        if self.request.user == pin.user:
+            return True
+        return False
 

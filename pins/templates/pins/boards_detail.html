@@ -1,0 +1,36 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block content %}
+
+  <h1 class="text-center" style="font-weight: bold">{{ object.title }}</h1>
+  <div>
+  <h4 style="font-weight: bold; display: inline;">{{ object.pins.count }} Pins</h4>
+
+  {% if object.user == user %}
+      <a href="{% url 'board-update' object.id %}" class="btn btn-secondary btn-sm mt-1 mb-1">Update</a>
+      <a href="{% url 'board-delete' object.id %}" class="btn btn-danger btn-sm mt-1 mb-1">Delete</a>
+  {% endif %}
+
+  </div>
+  <br><br>
+
+  <div class="row">
+
+    <section id="pinBoot">
+      {% for pin in object.pins.all %}
+
+          <article class="white-panel">
+              <a href="{% url 'pin-detail' pin.id %}">
+                  <img src="{{ pin.image.url }}" class="" alt="">
+              </a>
+{#              <a href="" class="save-btn">Save</a>#}
+          </article>
+
+      {% endfor %}
+
+    </section>
+
+  </div>
+
+{% endblock content %}
