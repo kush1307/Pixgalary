@@ -54,6 +54,12 @@ class UserUpdateForm(forms.ModelForm):
         "placeholder": "Email"
     }))
 
+    class Meta:
+        model = User
+        fields = ['username', 'email']
+
+
+class ProfileUpdateForm(forms.ModelForm):
     about = forms.CharField(required=False, widget=forms.Textarea(attrs={
         "class": "input",
         "type": "text",
@@ -62,11 +68,5 @@ class UserUpdateForm(forms.ModelForm):
     }))
 
     class Meta:
-        model = User
-        fields = ['username', 'email', 'about']
-
-
-class ProfileUpdateForm(forms.ModelForm):
-    class Meta:
         model = Profile
-        fields = ['image']
+        fields = ['about', 'image']

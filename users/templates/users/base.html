@@ -23,7 +23,7 @@
 
           <form id="search-form" class="form-inline mr-auto" style="margin-left: -72px" method="GET" action="{% url 'search' %}">
               <input class="form-control mr-sm-2"  style="border-radius: 20px; width: 400px; background-color: #eee" type="search" placeholder="Search" name="q" value="{{request.GET.q}}">
-              <a type="button" onclick="document.getElementById('search-form').submit();" style="width: 80px; text-decoration: none; font-weight: bold; background-color: #e60023; color: white; border-radius: 20px; padding: 8px 17px">Search</a>
+              <a type="button" onclick="document.getElementById('search-form').submit();" style="width: 80px; text-decoration: none; font-weight: bold; background-color: #e60023; color: white; border-radius: 20px; padding: 8px 17px; cursor:pointer">Search</a>
           </form>
 
             <!-- Navbar Right Side -->

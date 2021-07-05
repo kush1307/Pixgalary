@@ -151,6 +151,11 @@ class UserBoardView(ListView, LoginRequiredMixin):
         # following, create = Followers.objects.get_or_create(user=session_user.id)
         # check_user_followers = Followers.objects.filter(another_user=user_obj)
 
+        is_user_ex = Followers.objects.filter(user__username=self.kwargs.get('username')).exists()
+        if not is_user_ex:
+            us = User.objects.get(username=self.kwargs.get('username'))
+            Followers.objects.create(user=us)
+
         re = Followers.objects.get(user__username=self.kwargs.get('username'))
         check_user_followers = re.another_user.count()
         print(f"->>>>>>>>>>>>>>>>>>> {check_user_followers}")
@@ -235,6 +240,11 @@ class UserSavedPinsView(ListView, LoginRequiredMixin):
         # session_following, create = Followers.objects.get_or_create(user=session_user)
         # following, create = Followers.objects.get_or_create(user=session_user.id)
         # check_user_followers = Followers.objects.filter(another_user=user_obj)
+
+        is_user_ex = Followers.objects.filter(user__username=self.kwargs.get('username')).exists()
+        if not is_user_ex:
+            us = User.objects.get(username=self.kwargs.get('username'))
+            Followers.objects.create(user=us)
 
         re = Followers.objects.get(user__username=self.kwargs.get('username'))
         check_user_followers = re.another_user.count()
