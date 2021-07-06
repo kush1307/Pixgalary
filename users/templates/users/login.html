@@ -26,6 +26,10 @@
                           </center>
                         </div>
 
+                        {% if request.GET.next %}
+                            <input type="hidden" name="next" value="{{ request.GET.next }}">
+                        {% endif %}
+
                         <div class="form-group">
                             <center>
                             <input class="btn btn-primary" type="submit" value="Login" style="background-color :#e60023; font-size:15px; font-weight: bold; text-align: center; border-radius:20px; height: 40px; width: 80%; border: None">

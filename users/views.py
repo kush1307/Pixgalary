@@ -32,7 +32,10 @@ def login(request):
         if user is not None:
             auth.login(request, user)
             messages.success(request, 'You are now logged in!!')
-            return redirect('pin-home')
+            if 'next' in request.POST:
+                return redirect(request.POST.get('next'))
+            else:
+                return redirect('pin-home')
         else:
             messages.error(request, 'Invalid Credentials')
             return redirect('login')

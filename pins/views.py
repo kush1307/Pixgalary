@@ -7,7 +7,9 @@ from django.contrib.auth.models import User
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
-
+import operator
+from functools import reduce
+from django.db.models import Q
 
 def home(request):
     context = {
@@ -127,8 +129,13 @@ def SearchResultView(request):
      results = Pins.objects.filter(qset1).distinct()
     """
     topic = request.GET.get('q')
-    topic = topic.strip()
-    pi = Pins.objects.filter(category__topic__icontains=topic)
+    topic = topic.split(' ')
+    qset1 = reduce(operator.__or__,
+                   [Q(category__topic__icontains=query) | Q(category__topic__icontains=query) for query in topic if query != ''])
+    pi = Pins.objects.filter(qset1).distinct()
+
+    # topic = topic.strip()
+    # pi = Pins.objects.filter(category__topic__icontains=topic)
 
     return render(request, 'pins/search.html', {'topic': topic,
                                                 'pins': pi})
