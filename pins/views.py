@@ -11,6 +11,7 @@ import operator
 from functools import reduce
 from django.db.models import Q
 
+
 def home(request):
     context = {
         'pins': Pins.objects.all()
