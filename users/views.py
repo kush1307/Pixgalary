@@ -11,6 +11,16 @@ from .models import Profile, Followers
 
 def register(request):
     if request.method == 'POST':
+        username = request.POST['username']
+        email = request.POST['email']
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, 'That username is taken')
+            return redirect('register')
+        else:
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'That email is being used')
+                return redirect('register')
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             form.save()

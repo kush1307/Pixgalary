@@ -160,4 +160,5 @@ stylize any heading tags withing white-panel below
   color: white;
   font-weight: bold;
   text-decoration: none;
+  border-radius: 20px;
 }

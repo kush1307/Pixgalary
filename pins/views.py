@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
-from .models import Pins, Category, SavePin, Board
+from .models import Pins, Category, SavePin, Board, Comment
 from users.models import Profile, Followers
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.models import User
@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 import operator
 from functools import reduce
 from django.db.models import Q
+from .forms import CommentForm
 
 
 def home(request):
@@ -86,7 +87,7 @@ def pin_detail(request, **kwargs):
     print(saved)
     print(is_followed)
     context = {"object": Pins.objects.get(pk=kwargs.get('pk')),
-               'saved': saved, 'is_followed': is_followed, 'board_choices': board_choices}
+               'saved': saved, 'is_followed': is_followed, 'board_choices': board_choices, 'form': CommentForm()}
 
     return render(request, 'pins/pins_detail.html', context)
 
@@ -354,4 +355,22 @@ class BoardDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         if self.request.user == pin.user:
             return True
         return False
+
+
+def comment_create(request, **kwargs):
+    p_id = kwargs.get('pk')
+    if request.method == 'POST':
+        print("hellooooo")
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            form.instance.pins_id = p_id
+            form.instance.name = request.user
+            form.save()
+            return redirect('pin-detail', p_id)
+    else:
+        form = CommentForm(request.POST)
+    return redirect('pin-detail', p_id)
+
+
+
 

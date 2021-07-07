@@ -68,18 +68,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="{% static 'pins/pins.js' %}"></script>
-    <script>
-      // Add active class to the current button (highlight it)
-      var header = document.getElementById("myDIV");
-      var btns = header.getElementsByClassName("board-btn");
-      for (var i = 0; i < btns.length; i++) {
-        btns[i].addEventListener("click", function() {
-        var current = document.getElementsByClassName("active");
-        current[0].className = current[0].className.replace(" active", "");
-        this.className += " active";
-        });
-      }
-    </script>
+{#    <script>#}
+{#      // Add active class to the current button (highlight it)#}
+{#      var header = document.getElementById("myDIV");#}
+{#      var btns = header.getElementsByClassName("board-btn");#}
+{#      for (var i = 0; i < btns.length; i++) {#}
+{#        btns[i].addEventListener("click", function() {#}
+{#        var current = document.getElementsByClassName("active");#}
+{#        current[0].className = current[0].className.replace(" active", "");#}
+{#        this.className += " active";#}
+{#        });#}
+{#      }#}
+{#    </script>#}
     <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v11.0&appId=160693832765913&autoLogAppEvents=1" nonce="4kYLMNLo"></script>
     <script type="text/javascript" async src="https://platform.twitter.com/widgets.js"></script>
 </body>

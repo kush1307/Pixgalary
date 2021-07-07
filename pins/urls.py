@@ -20,4 +20,5 @@ urlpatterns = [
     path('board/<int:pk>/', BoardDetailView.as_view(), name='board-detail'),
     path('board/<int:pk>/update/', BoardUpdateView.as_view(), name='board-update'),
     path('board/<int:pk>/delete', BoardDeleteView.as_view(), name='board-delete'),
+    path('pin/<int:pk>/comment/', views.comment_create, name='pin-add-comment'),
 ]

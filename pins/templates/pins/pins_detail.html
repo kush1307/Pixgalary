@@ -81,7 +81,7 @@
                     <h2 class="card-title" style="margin-top: 30px">{{ object.title }}</h2>
                     <p style="margin-top: 20px">{{ object.description }}</p>
                     <img class="rounded-circle article-img" src="{{ object.user.profile.image.url }}" alt="">
-                    <a href="{% url 'user-board' object.user.username %}" style="color: black; font-weight: bold;">{{ object.user }}</a>
+                    <a href="{% url 'user-board' object.user.username %}" style="color: black; font-weight: bold; margin-left: 10px;">{{ object.user }}</a>
                     {% if object.user != user and user.is_authenticated %}
                         {% if is_followed %}
                             <a href="{% url 'follow-user' object.user.username %}" class="btn btn-secondary" style="margin-left:200px;">Unfollow</a>
@@ -92,8 +92,43 @@
                     <br>
 
 
+                    {# Comments section #}
+                    <br>
+                    <h3>Comments..</h3>
+
+                    {% if not object.comments.all %}
+                        No Comments Yet...
+                    {% else %}
+                        {% for comment in object.comments.all %}
+                            <div class="mt-3" style="border: 1px solid gray; border-radius: 20px; padding: 10px 0 10px 10px;">
+                                <img class="rounded-circle" src="{{ comment.name.profile.image.url }}" alt="" style="height: 45px; width: 45px; float: left;">
+                                <div class="ml-3" style="display: inline;">
+                                <strong>
+                                    {{ comment.name }}
+                                    {{ comment.date_added }}
+                                </strong>
+                                <br>
+                                </div>
+                                <div class="ml-3" style="display: inline;">
+                                {{ comment.body }}
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                    {% endif %}
+
+                    <form method="POST" action="{% url 'pin-add-comment' object.id %}" class="mt-5">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <img class="rounded-circle" src="{{ request.user.profile.image.url }}" alt="" style="height: 45px; width: 45px;">
+                            {{ form.body }}
+                        </div>
+                        <button class="btn btn-primary btn-sm" type="submit">Add</button>
+                    </form>
                 </div>
+
             </div>
         </div>
     </div>
+
 {% endblock content %}
