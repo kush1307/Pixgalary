@@ -22,6 +22,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
 
 urlpatterns = [
     path('admin/', admin.site.urls),
