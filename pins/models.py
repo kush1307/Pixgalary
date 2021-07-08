@@ -56,6 +56,21 @@ class Board(models.Model):
     def get_absolute_url(self):
         return reverse('board-detail', kwargs={'pk': self.pk})
 
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+
+        img = Image.open(self.image1.path)
+        img.save(self.image1.path, format="JPEG", quality=70)
+
+        img = Image.open(self.image2.path)
+        img.save(self.image2.path, format="JPEG", quality=70)
+
+        img = Image.open(self.image3.path)
+        img.save(self.image3.path, format="JPEG", quality=70)
+
+        img = Image.open(self.image4.path)
+        img.save(self.image4.path, format="JPEG", quality=70)
+
 
 class Comment(models.Model):
     pins = models.ForeignKey(Pins, related_name="comments", on_delete=models.CASCADE)

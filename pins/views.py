@@ -143,7 +143,7 @@ def SearchResultView(request):
                                                 'pins': pi})
 
 
-class UserBoardView(ListView, LoginRequiredMixin):
+class UserBoardView(LoginRequiredMixin, ListView):
     model = Pins
     template_name = 'pins/pinboard.html'
     context_object_name = 'pins'
@@ -290,6 +290,7 @@ class BoardCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
+@login_required
 def save_pin_board_view(request, p_id, b_id):
     pin_id = get_object_or_404(Pins, id=p_id)
     pin_saved_by_user = request.user.username
@@ -326,7 +327,7 @@ def save_pin_board_view(request, p_id, b_id):
     return redirect('pin-detail', p_id)
 
 
-class BoardDetailView(DetailView):
+class BoardDetailView(LoginRequiredMixin, DetailView):
     model = Board
     template_name = 'pins/boards_detail.html'
 
@@ -357,6 +358,7 @@ class BoardDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
         return False
 
 
+@login_required
 def comment_create(request, **kwargs):
     p_id = kwargs.get('pk')
     if request.method == 'POST':
