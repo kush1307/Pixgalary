@@ -10,6 +10,8 @@ from .models import Profile, Followers
 
 
 def register(request):
+    """This view is for user registration.
+    If the email for username is already in use then user will not be able to register."""
     if request.method == 'POST':
         username = request.POST['username']
         email = request.POST['email']
@@ -33,6 +35,7 @@ def register(request):
 
 
 def login(request):
+    """This view is for user login purpose."""
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
@@ -54,6 +57,8 @@ def login(request):
 
 
 def change_password(request):
+    """This view is for password change using old password.
+    User will be redirected to login page once password is changed."""
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
         if form.is_valid():
@@ -72,6 +77,8 @@ def change_password(request):
 
 @login_required
 def profile(request):
+    """This view is for profile update purpose.
+    User can change his/her profile image from here."""
     try:
         profile = request.user.profile
     except Profile.DoesNotExist:
@@ -95,6 +102,7 @@ def profile(request):
 
 
 def follow_user(request, **kwargs):
+    """This view is for follow and unfollow functionality."""
     other_user = User.objects.get(username=kwargs.get('username'))
     print(other_user)
     session_user = request.user.username

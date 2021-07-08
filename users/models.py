@@ -4,6 +4,7 @@ from PIL import Image
 
 
 class Profile(models.Model):
+    """This is user profile model."""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pic')
     about = models.TextField(blank=True)
@@ -12,6 +13,7 @@ class Profile(models.Model):
         return f'{self.user.username} Profile'
 
     def save(self, *args, **kwargs):
+        """Using this function when we upload our profile image it will decrease its height and with by 300px."""
         super().save(*args, **kwargs)
 
         img = Image.open(self.image.path)
@@ -22,6 +24,7 @@ class Profile(models.Model):
 
 
 class Followers(models.Model):
+    """This is Followers model using which users can follow and unfollow each other."""
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     another_user = models.ManyToManyField(User, related_name='another_user')
 

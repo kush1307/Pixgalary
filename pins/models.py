@@ -5,6 +5,7 @@ from PIL import Image
 
 
 class Category(models.Model):
+    """This is category model. In this category of the pin is defined."""
     topic = models.CharField(max_length=25)
 
     def __str__(self):
@@ -12,7 +13,7 @@ class Category(models.Model):
 
 
 class Pins(models.Model):
-    # category = models.ForeignKey(Category, related_name="category", on_delete=models.DO_NOTHING)
+    """This is pins model data required in the pins is written below."""
     category = models.ManyToManyField(Category)
     image = models.ImageField(upload_to='all_photos')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -23,6 +24,7 @@ class Pins(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
+        """Using this function big size images are compressed."""
         super().save(*args, **kwargs)
 
         img = Image.open(self.image.path)
@@ -33,6 +35,7 @@ class Pins(models.Model):
 
 
 class SavePin(models.Model):
+    """This is save-pin model in this which user has saved which pins data is stored."""
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     pin = models.ForeignKey(Pins, related_name='pin', on_delete=models.DO_NOTHING)
 
@@ -41,6 +44,7 @@ class SavePin(models.Model):
 
 
 class Board(models.Model):
+    """This is board model in this board related data is stored."""
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     title = models.CharField(max_length=100)
     pins = models.ManyToManyField(Pins, related_name='pins', blank=True)
@@ -57,6 +61,7 @@ class Board(models.Model):
         return reverse('board-detail', kwargs={'pk': self.pk})
 
     def save(self, *args, **kwargs):
+        """Using this function big size images are compressed."""
         super().save(*args, **kwargs)
 
         img = Image.open(self.image1.path)
@@ -73,6 +78,7 @@ class Board(models.Model):
 
 
 class Comment(models.Model):
+    """This comment model here which user has commented on which pin data is stored."""
     pins = models.ForeignKey(Pins, related_name="comments", on_delete=models.CASCADE)
     name = models.ForeignKey(User, on_delete=models.CASCADE)
     body = models.TextField()

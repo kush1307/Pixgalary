@@ -131,4 +131,25 @@
         </div>
     </div>
 
+    <br>
+
+    <h2 class="text-center" style="font-weight: bold;">Recommended Pins</h2>
+    <br>
+    <div class="row">
+
+    <section id="pinBoot">
+      {% for pin in recommended %}
+
+          <article class="white-panel">
+              <a href="{% url 'pin-detail' pin.id %}">
+                  <img src="{{ pin.image.url }}" class="" alt="">
+              </a>
+          </article>
+
+      {% endfor %}
+
+    </section>
+
+  </div>
+
 {% endblock content %}
