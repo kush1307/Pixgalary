@@ -116,13 +116,16 @@ def follow_user(request, **kwargs):
             add_usr.another_user.remove(other_user)
             is_followed = False
             messages.success(request, f'User Unfollowed!')
-            return render(request, 'pins/home.html')
+            return redirect('user-board', other_user)
+            # return render(request, 'pins/home.html')
+
         else:
             add_usr = Followers.objects.get(user=get_user)
             add_usr.another_user.add(other_user)
             is_followed = True
             messages.success(request, f'User Followed!')
-            return render(request, 'pins/home.html')
+            return redirect('user-board', other_user)
+            # return render(request, 'pins/home.html')
 
     else:
         save_user = Followers(user=get_user)
