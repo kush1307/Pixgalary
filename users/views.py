@@ -17,11 +17,11 @@ def register(request):
         email = request.POST['email']
 
         if User.objects.filter(username=username).exists():
-            messages.error(request, 'That username is taken')
+            messages.warning(request, 'That username is taken')
             return redirect('register')
         else:
             if User.objects.filter(email=email).exists():
-                messages.error(request, 'That email is being used')
+                messages.warning(request, 'That email is being used')
                 return redirect('register')
         form = UserRegisterForm(request.POST)
         if form.is_valid():
@@ -50,7 +50,7 @@ def login(request):
             else:
                 return redirect('pin-home')
         else:
-            messages.error(request, 'Invalid Credentials')
+            messages.warning(request, 'Invalid Credentials')
             return redirect('login')
     else:
         return render(request, 'users/login.html')
@@ -67,7 +67,7 @@ def change_password(request):
             messages.success(request, 'Your password was successfully updated!')
             return redirect('login')
         else:
-            messages.error(request, 'Please correct the error below.')
+            messages.warning(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
     return render(request, 'users/change_password.html', {

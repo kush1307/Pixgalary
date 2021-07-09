@@ -137,8 +137,8 @@ def SearchResultView(request):
 
 
 class UserBoardView(LoginRequiredMixin, ListView):
-    """This view is for user pin-board where user's created pins are displayed."""
-    """Number of followers and followings are also displayed here."""
+    """This view is for user pin-board where user's created pins are displayed.
+    Number of followers and followings are also displayed here."""
     model = Pins
     template_name = 'pins/pinboard.html'
     context_object_name = 'pins'
