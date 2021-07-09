@@ -56,6 +56,7 @@ def login(request):
         return render(request, 'users/login.html')
 
 
+@login_required
 def change_password(request):
     """This view is for password change using old password.
     User will be redirected to login page once password is changed."""
@@ -101,6 +102,7 @@ def profile(request):
     return render(request, 'users/profile.html', context)
 
 
+@login_required
 def follow_user(request, **kwargs):
     """This view is for follow and unfollow functionality."""
     other_user = User.objects.get(username=kwargs.get('username'))
@@ -154,6 +156,5 @@ def follow_user(request, **kwargs):
             is_followed = True
             messages.success(request, f'User Followed!')
             return render(request, 'pins/home.html')
-
 
 
