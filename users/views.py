@@ -16,6 +16,9 @@ def register(request):
         username = request.POST['username']
         email = request.POST['email']
 
+        username = username.lower()     # If some user types same username with uppercase.
+        email = email.lower()       # If some user types same email id with uppercase.
+
         if User.objects.filter(username=username).exists():
             messages.warning(request, 'That username is taken')
             return redirect('register')

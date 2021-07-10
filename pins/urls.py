@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 from .views import (PinCreateView, PinUpdateView, PinDeleteView,
                     UserBoardView, UserSavedPinsView, BoardCreateView,
-                    BoardDetailView, BoardUpdateView, BoardDeleteView)
+                    BoardDetailView, BoardUpdateView, BoardDeleteView, CategoryCreateView)
 
 urlpatterns = [
     path('', views.home, name='pin-home'),
@@ -21,4 +21,5 @@ urlpatterns = [
     path('board/<int:pk>/update/', BoardUpdateView.as_view(), name='board-update'),
     path('board/<int:pk>/delete', BoardDeleteView.as_view(), name='board-delete'),
     path('pin/<int:pk>/comment/', views.comment_create, name='pin-add-comment'),
+    path('pin/category/new/', CategoryCreateView.as_view(), name='category-create'),
 ]

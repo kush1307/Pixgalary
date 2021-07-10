@@ -347,3 +347,14 @@ def comment_create(request, **kwargs):
     else:
         form = CommentForm(request.POST)
     return redirect('pin-detail', p_id)
+
+
+class CategoryCreateView(LoginRequiredMixin, CreateView):
+    """This view is for creating Category of user's choice."""
+    model = Category
+    fields = ['topic']
+    template_name = 'pins/categorys_form.html'
+    success_url = reverse_lazy('pin-create')
+
+    def form_valid(self, form):
+        return super().form_valid(form)

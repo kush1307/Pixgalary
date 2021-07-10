@@ -1,5 +1,5 @@
 from django import forms
-from .models import Comment
+from .models import Comment, Category
 
 
 class CommentForm(forms.ModelForm):
@@ -15,3 +15,11 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['body']
+
+
+class CategoryForm(forms.ModelForm):
+    topic = forms.CharField()
+
+    class Meta:
+        model = Category
+        fields = ['topic']

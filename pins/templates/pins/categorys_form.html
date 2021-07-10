@@ -3,15 +3,16 @@
 
 {% block content %}
     <div class="content-section">
-        <a class="btn btn-outline-secondary" href="{% url 'category-create' %}">Add Category</a>
+
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Pins</legend>
+                <legend class="border-bottom mb-4">Category</legend>
                 {{ form | crispy }}
             </fieldset>
             <div class="form-group">
-                <button class="btn btn-outline-info" type="submit">Post</button>
+                <button class="btn btn-outline-info" type="submit">Add</button>
+                <a class="btn btn-outline-secondary" href="{% url 'pin-create' %}">Cancel</a>
             </div>
         </form>
     </div>
