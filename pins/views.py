@@ -11,9 +11,19 @@ import operator
 from functools import reduce
 from django.db.models import Q
 from .forms import CommentForm
+from datetime import datetime
 
 
 def home(request):
+    """In this view all the Pins are displayed."""
+    today = datetime.now()
+    context = {
+        'today_pins': Pins.objects.filter(date_created__date=datetime.date(today))
+    }
+    return render(request, 'pins/today_pins.html', context)
+
+
+def today_pins_list(request):
     """In this view all the Pins are displayed."""
     context = {
         'pins': Pins.objects.all()

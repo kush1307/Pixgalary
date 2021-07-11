@@ -6,6 +6,7 @@ from .views import (PinCreateView, PinUpdateView, PinDeleteView,
 
 urlpatterns = [
     path('', views.home, name='pin-home'),
+    path('pins/today/', views.today_pins_list, name='today'),
     # path('pin/<int:pk>/', PinDetailView.as_view(), name='pin-detail'),
     path('pin/<int:pk>/', views.pin_detail, name='pin-detail'),
     path('pin/new/', PinCreateView.as_view(), name='pin-create'),
