@@ -5,7 +5,12 @@
 {#    <h1>Welcome Home</h1>#}
   <div class="row">
 
+    {% if today_pins.count == 0 %}
+        <h1>No Pins added today</h1>
+    {% endif %}
+
     <section id="pinBoot">
+
       {% for pin in today_pins %}
 
           <article class="white-panel">
