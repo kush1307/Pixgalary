@@ -23,7 +23,7 @@ def home(request):
 
 
 def today_pins_list(request):
-    """In this view all the Pins are displayed."""
+    """In this view all the Pins that are created today are displayed."""
     today = datetime.now()
     context = {
         'today_pins': Pins.objects.filter(date_created__date=datetime.date(today))
@@ -367,4 +367,9 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('pin-create')
 
     def form_valid(self, form):
+        new = form.instance.topic
+        if Category.objects.filter(Q(topic__icontains=new)).count() > 0:
+            messages.warning(self.request, 'category already exist.')
+            return redirect('pin-create')
+
         return super().form_valid(form)
