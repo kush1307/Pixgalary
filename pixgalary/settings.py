@@ -16,13 +16,18 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+import environ
+
+env = environ.Env()
+# reading .env file
+environ.Env.read_env()
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-
-SECRET_KEY = os.environ.get('SECRET_KEY_PIX')
+SECRET_KEY = env('SECRET_KEY_PIX')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -114,23 +119,23 @@ SOCIALACCOUNT_PROVIDERS = {
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'd32es4n9uuh8d3',
-        'USER': 'qyhjxgjkfvuldv',
-        'PASSWORD': 'eda1f365ae8a876cb3430a1ccfefe6533607f8223b47f57ad7149281338d701f',
-        'HOST': 'ec2-34-232-191-133.compute-1.amazonaws.com',
-        'PORT': 5432,
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'd32es4n9uuh8d3',
+#         'USER': 'qyhjxgjkfvuldv',
+#         'PASSWORD': 'eda1f365ae8a876cb3430a1ccfefe6533607f8223b47f57ad7149281338d701f',
+#         'HOST': 'ec2-34-232-191-133.compute-1.amazonaws.com',
+#         'PORT': 5432,
+#     }
+# }
 
 
 # Password validation
